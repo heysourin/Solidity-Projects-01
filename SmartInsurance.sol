@@ -32,6 +32,6 @@ contract SmartInsurance{
     }
 
     function claimInsurance(uint _amtClaimed) public {
-        require(msg.sender == hospitalMapping[address]);
+        require(hospitalMapping[msg.sender],"Not a hospital");
     }
 }
