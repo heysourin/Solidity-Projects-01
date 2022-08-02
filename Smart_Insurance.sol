@@ -34,8 +34,8 @@ contract SmartInsurance{
 
 /* @dev owner(Insurance company) and only hospital (set by owner) can take out the insurance*/
 
-    function claimInsurance(uint _amtClaimed, address _patientadrs) public{
-        require(hospitalMapping[msg.sender],"Not a hospital");
+    function withdrawInsurance(uint _amtClaimed, address _patientadrs) public{
+        require(hospitalMapping[msg.sender] || msg.sender==owner,"Not a hospital");
         patientMapping[_patientadrs].amountInsured -= _amtClaimed;
     }
 }
