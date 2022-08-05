@@ -7,6 +7,7 @@ contract Wallet {
 
     address payable public owner;
 
+//you can also make another ac owner, simply by taking input in constructor
     constructor(){
         owner = payable(msg.sender);
     }
