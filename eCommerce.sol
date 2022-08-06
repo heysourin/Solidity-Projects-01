@@ -15,6 +15,10 @@ contract ecommerce{
 
     uint count = 1;
     Product[] public products;
+    address payable public manager;
+    constructor(){
+        manager = payable(msg.sender);
+    }
 
     event registered(string title, uint serialNum, address seller);
     event bought(uint productId, address buyer);
@@ -48,5 +52,11 @@ contract ecommerce{
         products[_serialNum-1].isDelivered = true;
         products[_serialNum-1].seller.transfer(products[_serialNum-1].price);
         emit delivered(_serialNum);
+    }
+
+    function destroy() public{
+        require(msg.sender == manager, "Only manager can call this function");
+        selfdestruct(manager);// contract will be destroyed annd all the funds in the contract will be transfered to the manager
+        //Why: to be safe from hacker
     }
 }
