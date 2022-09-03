@@ -22,8 +22,10 @@ contract ecommerce{
     function productAddBySeller(string memory _name, string memory _description, uint _price) public {
         require(_price > 0, "Price must be greater than 0");
         
-        Item memory tempItem;
+        Item memory tempItem;//creating a temporary variable of struct
 
+
+//creating instances of the variable 'tempItem', later putting into array 
         tempItem.name = _name;
         tempItem.description = _description;
         tempItem.price = _price ;
