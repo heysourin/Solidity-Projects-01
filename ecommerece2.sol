@@ -55,7 +55,7 @@ contract ecommerce{
         items[_itemId-1].isDelivered = true;
 
         uint x = items[_itemId-1].price;
-        items[_itemId-1].seller.transfer(x-((30*x)/100)); //30% commission of the ecommerce site
+        items[_itemId-1].seller.transfer(x-((30*x)/100)); //30% commission of the ecommerce site, 70% transfer to the seller
 
         emit delivered(_itemId, items[_itemId-1].isDelivered);
     }
