@@ -48,7 +48,8 @@ contract ecommerce{
 
     function buy(uint _serialNum) payable public isNotDestroyed{
         require(products[_serialNum-1].price == msg.value,"Pay the exact price");
-        require(products[_serialNum-1].seller != msg.sender,"Seller can't buy");
+        require(msg.sender != items[_itemId-1].seller, "Seller Can't buy");
+
 
         products[_serialNum-1].buyer = msg.sender;
         emit bought(_serialNum,msg.sender);
