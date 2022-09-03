@@ -40,7 +40,8 @@ contract ecommerce{
     function buy(uint _itemId) public payable{
         //itemId = index - 1
         require(items[_itemId-1].price == msg.value, "Please pay the exact price");
-        require(items[_itemId-1].seller != msg.sender, "Seller Can't buy");
+        require(msg.sender != items[_itemId-1].seller, "Seller Can't buy");
+
 
         items[_itemId-1].buyer = msg.sender;
 
