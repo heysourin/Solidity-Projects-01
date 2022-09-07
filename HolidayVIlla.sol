@@ -1,26 +1,31 @@
-//Holiday villa booking smart contract
 
 //SPDX-License-Identifier: MIT
-pragma solidity ^0.8.14;
+pragma solidity ^0.8.8;
 
 contract HolidayVilla{
-    address payable public owner;
-
-    enum StateOfVilla{
-        Vacant,
-        Booked
+    struct Villa{
+        string name;
+        uint villaId;
+        address customer;
+        bool isBooked;
     }
-    StateOfVilla public sv1;// checked villa's booking status
+
+    address payable public VillaOwner;
+
+    mapping (address => Villa) public villa;
 
     constructor(){
-        owner = payable(msg.sender);// this will make deployer 'owner', who will receive the money 
-        sv1=StateOfVilla.Vacant;//Setting default value vacant
+        VillaOwner = payable (msg.sender);
     }
 
-    function book() public payable {
-        require(sv1==StateOfVilla.Vacant, "Currently Ocuupied");
-        require(msg.value>= 2, "Not enough ether provided");//setting Villa booking price 2 ethers
-        owner.transfer(msg.value);// transfering money to 'owner' from other account
-        sv1=StateOfVilla.Booked;
+    function villaBook(string memory _name, uint _villaId) public payable{
+        require(msg.value >= 1 ether, "Minimum room cost 1 ether");
+        villa[msg.sender] = Villa(_name, _villaId, msg.sender, true);
+    }
+
+    function withdrawAmount() public {
+        require(msg.sender == VillaOwner, "Only owner can withdraw the balance");
+        VillaOwner.transfer(address(this).balance);
+        // require(owner.send(address(this).balance));
     }
 }
