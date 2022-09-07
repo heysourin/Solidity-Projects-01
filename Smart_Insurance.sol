@@ -1,41 +1,32 @@
 //SPDX-License-Identifier:MIT
 pragma solidity >=0.5.0 <=0.9.0;
 
-contract SmartInsurance{
-    struct Patient{
+contract insuranceContract{
+    address public insuranceCompany;
+
+    struct Insurance{
         string name;
-        bool isInsured;
         address patientAddress;
         uint amountInsured;
+        bool isInsured;
     }
 
-    mapping(address => Patient) public patientMapping;
-    mapping(address => bool) public hospitalMapping;
-    address owner;
+    mapping(address => Insurance) public insurance;
+    mapping (address => bool) public hospitalMapping;
 
     constructor(){
-        owner = msg.sender;
+        insuranceCompany = msg.sender;
     }
 
-    modifier onlyOwner(){
-        require(msg.sender == owner, "Only owner has the access");
-        _;
-    }
-
-    function sethospital(address _hospitalAdrs) public onlyOwner{
-        // require(!hospitalMapping[_hospitalAdrs]);
+    function setInsurance(string memory _name, uint _amountInsured, address _patientAddress, address _hospitalAdrs) public{
+        require(msg.sender == insuranceCompany, "Only owner has the access");
+        insurance[_patientAddress] = Insurance(_name, _patientAddress, _amountInsured, true);
         hospitalMapping[_hospitalAdrs]=true;
     }
 
-    function setPatient(string memory _name, address _patientAdrs, uint _amountInsured) public onlyOwner {
-        patientMapping[_patientAdrs] = Patient(_name, true, _patientAdrs, _amountInsured);
+    function claimInsurance(uint _amt, address _patientAdrs) public{
+        require( msg.sender == insuranceCompany ||  hospitalMapping[msg.sender],"Only hospital or the insurance company can claim");
+        insurance[_patientAdrs].amountInsured -= _amt;
     }
 
-
-/* @dev owner(Insurance company) and only hospital (set by owner) can take out the insurance*/
-
-    function withdrawInsurance(uint _amtClaimed, address _patientadrs) public{
-        require(hospitalMapping[msg.sender] || msg.sender==owner,"Not a hospital");
-        patientMapping[_patientadrs].amountInsured -= _amtClaimed;
-    }
 }
