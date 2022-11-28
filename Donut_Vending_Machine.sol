@@ -30,5 +30,15 @@ contract vendingMachine2{
 
     function withdrawBalance() public payable{
         require(msg.sender == owner, "Only owner can withdraw");
-        owner.transfer(address(this).balance);    }
+        
+        //// Process 1:
+        // owner.transfer(address(this).balance);
+
+        // Process 2:
+        bool sent = owner.send(address(this).balance);
+        require(sent, "Transaction failed");
+        
+        //// Process 3:
+        // owner.transfer(address(this).balance);
+    }
 }
