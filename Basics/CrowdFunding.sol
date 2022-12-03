@@ -33,7 +33,7 @@ contract Crowdfund {
 
     mapping(uint256 => Campaign) public campaigns;
 
-    mapping(uint256 => mapping(address => uint256)) public pledgeAmount; //Id => pledger=> amount
+    mapping(uint256 => mapping(address => uint256)) public pledgeAmount; // pledgeAmout[id][address] = amount
 
     constructor(address _token) {
         token = IERC20(_token);
