@@ -37,6 +37,7 @@ contract Crowdfund {
     mapping(uint256 => mapping(address => uint256)) public pledgeAmount; // pledgeAmout[id][address] = amount. Will help to chcek how much 
     //amounts of tokens each user has pledged to the campaign
 
+    //Deployed address of your ERC20 token is required.
     constructor(address _token) {
         token = IERC20(_token);
     }
