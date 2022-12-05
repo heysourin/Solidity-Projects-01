@@ -30,11 +30,12 @@ contract Crowdfund {
 
     IERC20 public immutable token;
 
-    uint256 public count; // Id & total count of campaigns created
+    uint256 public count; // Everytime you create a campaign, it increases ie. 'campaign Id'
 
     mapping(uint256 => Campaign) public campaigns;
 
-    mapping(uint256 => mapping(address => uint256)) public pledgeAmount; // pledgeAmout[id][address] = amount
+    mapping(uint256 => mapping(address => uint256)) public pledgeAmount; // pledgeAmout[id][address] = amount. Will help to chcek how much 
+    //amounts of tokens each user has pledged to the campaign
 
     constructor(address _token) {
         token = IERC20(_token);
@@ -112,6 +113,7 @@ contract Crowdfund {
         emit Claim(_id);
     }
 
+//If the campaign was unseccessful then refund is available. Like pledge < goal. Then users will be able to take the tokens out of the campaign.
     function refund(uint _id) external{
         Campaign storage campaign = campaigns[_id];
         require(block.timestamp > campaign.endAt,"Campaign is not ended yet");
