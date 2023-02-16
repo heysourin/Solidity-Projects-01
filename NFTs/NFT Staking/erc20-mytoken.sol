@@ -14,7 +14,7 @@ contract MyERC20 is ERC20, Ownable, ERC721Holder {
     uint256 public EMMISION_RATE = ((50 * 10) ^ decimals()) / 1 days;
 
     constructor(address _nft) ERC20("MyERC20", "M20") {
-        nft = IERC721(_nft);
+        nft = IERC721(_nft);//wrapping in ierc721 allows to interprate nft address as erc721 contract. which will allow us to call 'tranferFrom' etc.
     }
 
     // function mint(address to, uint256 amount) public onlyOwner {
