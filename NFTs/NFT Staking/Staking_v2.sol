@@ -33,6 +33,7 @@ contract NFTStaking is ReentrancyGuard {
     uint256 private rewardsPerHour = 100000; //wei per hour per nft
 
     mapping(address => Staker) public stakers;
+    
     mapping(uint256 => address) public stakerAddress;
 
     function stake(uint256 _tokenId) external nonReentrant {
@@ -40,20 +41,16 @@ contract NFTStaking is ReentrancyGuard {
             uint256 rewards = calculateRewards(msg.sender);
             stakers[msg.sender].unclaimedRewards += rewards;
         }
-
         require(
             nftCollection.ownerOf(_tokenId) == msg.sender,
             "You do not own this token"
         );
-
         nftCollection.transferFrom(msg.sender, address(this), _tokenId);
 
-        StakedToken memory stakedToken = StakedToken(msg.sender, _tokenId);
-
+        StakedToken memory stakedToken = StakedToken(msg.sender, _tokenId); // filling the struct
+        
         stakers[msg.sender].stakedTokens.push(stakedToken);
-
         stakers[msg.sender].amountStaked++;
-
         stakers[msg.sender].timeOfLastUpdate = block.timestamp;
 
         stakerAddress[_tokenId] = msg.sender;
@@ -80,15 +77,10 @@ contract NFTStaking is ReentrancyGuard {
                 break;
             }
         }
-
         stakers[msg.sender].stakedTokens[index].staker = address(0);
-
         stakers[msg.sender].amountStaked--;
-
         stakerAddress[_tokenId] = address(0);
-
         nftCollection.transferFrom(address(this), msg.sender, _tokenId);
-
         stakers[msg.sender].timeOfLastUpdate = block.timestamp;
     }
 
@@ -97,24 +89,19 @@ contract NFTStaking is ReentrancyGuard {
             stakers[msg.sender].unclaimedRewards;
 
         require(rewards > 0, "You have no rewards to claim");
-
         stakers[msg.sender].timeOfLastUpdate = block.timestamp;
         stakers[msg.sender].unclaimedRewards = 0;
-
         rewardsToken.safeTransfer(msg.sender, rewards);
     }
 
-    function calculateRewards(
-        address _staker
-    ) internal view returns (uint256 _rewqards) {
-        return (((block.timestamp -
-            stakers[_staker].timeOfLastUpdate *
+    function calculateRewards(address _staker) internal view returns (uint256) {
+        return ((((block.timestamp - stakers[_staker].timeOfLastUpdate) *
             stakers[_staker].amountStaked) * rewardsPerHour) / 3600);
     }
 
     function availableRewards(address _staker) public view returns (uint256) {
         uint256 rewards = calculateRewards(_staker) +
-            stakers[_staker].unclaimedRewards;
+            stakers[_staker].unclaimedRewards; // If any reward has reamined unclaimed that has been added
 
         return rewards;
     }
