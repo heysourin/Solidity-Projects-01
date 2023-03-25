@@ -4,16 +4,14 @@ import "@aave/core-v3/contracts/flashloan/base/FlashLoanSimpleReceiverBase.sol";
 import "@aave/core-v3/contracts/interfaces/IPoolAddressesProvider.sol";
 import "@aave/core-v3/contracts/dependencies/openzeppelin/contracts/IERC20.sol";
 
-contract ArbitrageFlashloan is FlashLoanSimpleReceiverBase {
+contract Flashloan is FlashLoanSimpleReceiverBase {
     address payable owner;
 
     constructor(address _addressProvider)
         FlashLoanSimpleReceiverBase(IPoolAddressesProvider(_addressProvider))
-    {
-        owner = payable(msg.sender);
-    }
+    {}
 
-    /*
+/*
 @param _token adddress of USDC token
 @param _amount of USDC with 6 zeros
 */
@@ -33,15 +31,6 @@ contract ArbitrageFlashloan is FlashLoanSimpleReceiverBase {
         );
     }
 
-    function arbitrargeUSDC(address _tokenAddress, uint256 _amount)
-        private
-        returns (bool)
-    {
-        uint256 arbitraged_amount = (_amount / 10);
-        IERC20 token = IERC20(_tokenAddress);
-        return token.transfer(owner, arbitraged_amount);
-    }
-
     function executeOperation(
         address asset,
         uint256 amount,
@@ -53,7 +42,6 @@ contract ArbitrageFlashloan is FlashLoanSimpleReceiverBase {
         // This contract now has the funds requested.
         // Your logic goeas here.
         //
-        bool status = arbitrargeUSDC(asset, amount);
 
         // At the end of your logic above, this contract owes
         // the flashloaned amount + premiums.
@@ -64,8 +52,19 @@ contract ArbitrageFlashloan is FlashLoanSimpleReceiverBase {
         uint256 totalAmount = amount + premium;
         IERC20(asset).approve(address(POOL), totalAmount);
 
-        return status;
+        return true;
     }
 
     receive() external payable {}
 }
+/*
+ * Definitaion: Flashloans are loans that are taken without any collateral.
+ * A special type of transaction where borrowed amount is returned in the same trnasaction.
+ * Not available on Ethereum but on Optimism, Harmony, Avalanche, Polygon, Fantom
+
+ ** FlashLoanSimpleReceiverBase: This is a base contract provided by the Aave Protocol that provides a
+     convenient interface for executing flash loans. It contains functions that handle the loan execution, such as executeOperation().
+
+ ** IPoolAddressesProvider: This is an interface that defines the functions for interacting with the Aave LendingPool contract.
+     It provides access to the contract addresses of the Aave Protocol, such as the addresses of the LendingPool and the LendingPoolParametersProvider.
+ */
