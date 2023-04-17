@@ -43,11 +43,12 @@ describe("Lock", function () {
 
       const userArray = [user1Address, user2Address, user3Address];
 
-      const nftId = ["2", "3", "5"];
+      const nftIds = ["2", "3", "5"];
+
       await airdropContract.bulkAirdropNFT(
         nftContractAddress,
         userArray,
-        nftId
+        nftIds
       );
 
       expect(await nftContract.ownerOf(2)).to.equal(user1Address);
