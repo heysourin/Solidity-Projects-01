@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.4;
 
-import "@openzeppelin/contracts@4.7.3/token/ERC721/ERC721.sol";
-import "@openzeppelin/contracts@4.7.3/token/ERC721/extensions/ERC721URIStorage.sol";
-import "@openzeppelin/contracts@4.7.3/access/Ownable.sol";
-import "@openzeppelin/contracts@4.7.3/utils/Counters.sol";
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/utils/Counters.sol";
 
-contract TimelessChild is ERC721, ERC721URIStorage, Ownable {
+contract PixelNFTs is ERC721, ERC721URIStorage, Ownable {
     using Counters for Counters.Counter;
 
     Counters.Counter private _tokenIdCounter;
@@ -14,7 +14,7 @@ contract TimelessChild is ERC721, ERC721URIStorage, Ownable {
     constructor() ERC721("AirdropBySourin", "AS") {}
 
     function _baseURI() internal pure override returns (string memory) {
-        return "ipfs://QmcFDx8avDtPXWzTFrJbdRd8m7aBJsdV95VsCum8i17qZH";
+        return "ipfs://QmSfRvWHmZVBvSTjzGghsFzDEuMDdT2ZceS8Nvn35Lq2Wr";
     }
 
     function safeMint() public {
@@ -44,3 +44,5 @@ contract TimelessChild is ERC721, ERC721URIStorage, Ownable {
     }
 }
 //REMINDER: Before you mint from Airdrop contract, you have to approve the airdrop contract
+// 
+
