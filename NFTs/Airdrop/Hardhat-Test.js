@@ -17,6 +17,10 @@ describe("Lock", function () {
     nftContract = await NFTContract.deploy();
 
     const AIRDropContract = await ethers.getContractFactory("NFTAirdrop");
-    airdropContract = await AIRDropContract.deploy()
+    airdropContract = await AIRDropContract.deploy();
+  });
+
+  describe("It will mint Tokens in the erc721 smart contract", function () {
+    it("Should mint a single NFT", async () => {});
   });
 });
